@@ -9152,8 +9152,12 @@ void    ImGui::TableSetupColumn(const char* label, ImGuiTableColumnFlags flags, 
         // Init default visibility/sort state
         if (flags & ImGuiTableColumnFlags_DefaultHide)
             column->IsActive = column->NextIsActive = false;
-        if (flags & ImGuiTableColumnFlags_DefaultSort)
+        if (flags & ImGuiTableColumnFlags_DefaultSort) {
             column->SortOrder = 0; // Multiple columns using _DefaultSort will be reordered when building the sort specs.
+            column->SortDirection = (column->Flags & ImGuiTableColumnFlags_PreferSortDescending)
+                                        ? (ImS8)ImGuiSortDirection_Descending
+                                        : (ImU8)(ImGuiSortDirection_Ascending);
+        }
     }
 
     // Store name (append with zero-terminator in contiguous buffer)
